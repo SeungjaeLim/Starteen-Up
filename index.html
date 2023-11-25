@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="title">책 정리 도우미</div>
+    <div class="subtitle">서초청소년도서관 스타틴업 주니어</div>
+    <div class="author">임승재</div>
+<button type="button" onclick="init()">Start</button>
+<div id="webcam-container"></div>
+<div id="label-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    const URL = "./model/";
+    let model, webcam, labelContainer, maxPredictions;
+
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const flip = true; 
+        webcam = new tmImage.Webcam(200, 200, flip); 
+        await webcam.setup(); 
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop() {
+        webcam.update(); 
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        const prediction = await model.predict(webcam.canvas);
+        let highestScoreIndex = 0;
+        let highestScore = 0;
+
+        for (let i = 0; i < maxPredictions; i++) {
+            if (prediction[i].probability > highestScore) {
+                highestScore = prediction[i].probability;
+                highestScoreIndex = i;
+            }
+        }
+
+        // Display the highest probability class name in a larger size
+        labelContainer.innerHTML = `<div style="font-size: larger;">${prediction[highestScoreIndex].className}</div>`;
+
+        // Display all predictions in a smaller size
+        for (let i = 0; i < maxPredictions; i++) {
+            let text = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.innerHTML += `<div style="font-size: smaller;">${text}</div>`;
+        }
+    }
+</script>
+
+</body>
+</html>

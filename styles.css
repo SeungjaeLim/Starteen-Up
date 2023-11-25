@@ -1,0 +1,62 @@
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #e6f2ff; /* Light blue background */
+}
+header {
+    
+    color: #fff;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.title, .subtitle, .author {
+    margin: 10px 0;
+    color: #005580; /* Darker blue for text */
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 18px;
+}
+
+.author {
+    font-size: 16px;
+}
+
+#webcam-container {
+    width: 300px;
+    height: 300px;
+    border: 2px solid #b3d9ff; /* Lighter blue border */
+    margin: 20px auto;
+    background-image: url('background.jpg'); /* Add the background image to the header */
+    background-size: cover; /* This will ensure that the image covers the header */
+    background-position: center; /* This centers the image in the header */
+    background-repeat: no-repeat;
+}
+
+#label-container {
+    margin-top: 10px;
+    text-align: center;
+    color: #005580; /* Darker blue for text */
+}
+
+button {
+    background-color: #007acc; /* Medium blue for button */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005c99; /* Slightly darker blue on hover */
+}
